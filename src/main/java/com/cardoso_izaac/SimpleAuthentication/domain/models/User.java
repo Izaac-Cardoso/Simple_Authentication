@@ -20,7 +20,7 @@ public class User {
     private String email;
 
     @NotNull
-    @Size(min = 6, max = 8)
+    //@Size(min = 6, max = 8)
     private String password;
 
     public User(String name, String email, String password) {

@@ -12,6 +12,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class UserService {
@@ -26,6 +27,7 @@ public class UserService {
         this.encoder = encoder;
     }
 
+    @Transactional
     public void createUser(SignUpDTO request) {
         var email = request.email();
         var currentUser = repository.findByEmail(email);
@@ -39,15 +41,15 @@ public class UserService {
         repository.save(newUser);
     }
 
-    public void login(SignInDTO request) {
-        Authentication auth;
-        try{auth = authManager.authenticate(
-                new UsernamePasswordAuthenticationToken(request.name(), request.password()));
-
-            SecurityContextHolder.getContext().setAuthentication(auth);
-
-        } catch(BadCredentialsException e) {
-            e.getMessage();
-        }
-    }
+//    public String login(SignInDTO request) {
+//        Authentication auth;
+//        try{ auth = authManager.authenticate(
+//                new UsernamePasswordAuthenticationToken(request.name(), request.password()));
+//
+//            SecurityContextHolder.getContext().setAuthentication(auth);
+//
+//        } catch(BadCredentialsException e) {
+//            e.getMessage();
+//        }
+//    }
 }
