@@ -5,6 +5,8 @@ import com.cardoso_izaac.SimpleAuthentication.domain.repositories.UserRepository
 import com.cardoso_izaac.SimpleAuthentication.dto.SignUpDTO;
 import com.cardoso_izaac.SimpleAuthentication.dto.SignInDTO;
 import com.cardoso_izaac.SimpleAuthentication.exceptions.DuplicatedException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -13,6 +15,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 @Service
 public class UserService {
@@ -28,7 +31,13 @@ public class UserService {
     }
 
     @Transactional
-    public void createUser(SignUpDTO request) {
+    public ResponseEntity<?> createUser(SignUpDTO request) {
+        if(request.name() == null || request.name().isBlank()
+                || request.password() == null || request.password().isBlank()
+                || request.email() == null || request.email().isBlank()) {
+            throw new BadCredentialsException("One or more invalid fields.");
+        }
+
         var email = request.email();
         var currentUser = repository.findByEmail(email);
         if(currentUser.isPresent()) {
@@ -39,6 +48,8 @@ public class UserService {
 
         User newUser = new User(request.name(), request.email(), hashedPassword);
         repository.save(newUser);
+
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
 //    public String login(SignInDTO request) {

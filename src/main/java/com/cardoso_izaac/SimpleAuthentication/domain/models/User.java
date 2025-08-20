@@ -23,6 +23,9 @@ public class User {
     //@Size(min = 6, max = 8)
     private String password;
 
+    public User() {
+    }
+
     public User(String name, String email, String password) {
         this.name = name;
         this.email = email;

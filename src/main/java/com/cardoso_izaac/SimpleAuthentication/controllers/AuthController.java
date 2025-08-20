@@ -1,6 +1,7 @@
 package com.cardoso_izaac.SimpleAuthentication.controllers;
 
 import com.cardoso_izaac.SimpleAuthentication.configuration.JwtService;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -31,23 +32,22 @@ public class AuthController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<Void> signup(@Valid @RequestBody SignUpDTO request) {
-        service.createUser(request);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<?> signup(@Valid @RequestBody SignUpDTO request) {
+        return service.createUser(request);
     }
 
     @PostMapping("/signin")
-    public ResponseEntity<String> signin(@Valid @RequestBody SignInDTO request) {
+    public ResponseEntity<?> signin(@Valid @RequestBody SignInDTO request) {
         Authentication auth;
         try{ auth = authManager.authenticate(
                 new UsernamePasswordAuthenticationToken(request.name(), request.password()));
                 SecurityContextHolder.getContext().setAuthentication(auth);
+                String token = jwtService.generateToken(request);
+
+                return new ResponseEntity<>(token, HttpStatus.OK);
 
         } catch(BadCredentialsException e) {
-            e.getMessage();
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
        }
-
-        String token = jwtService.generateToken(request);
-        return ResponseEntity.ok(token);
     }
 }
