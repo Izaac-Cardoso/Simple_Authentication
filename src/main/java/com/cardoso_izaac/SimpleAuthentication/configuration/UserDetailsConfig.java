@@ -22,7 +22,7 @@ public class UserDetailsConfig implements UserDetailsService {
                   .orElseThrow(() -> new UsernameNotFoundException("The user informed was not found"));
 
          return User.builder()
-                 .username(userObj.getName())
+                 .username(userObj.getEmail())
                  .password(userObj.getPassword())
                  .build();
     }

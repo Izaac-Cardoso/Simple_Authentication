@@ -40,7 +40,7 @@ public class AuthController {
     public ResponseEntity<?> signin(@Valid @RequestBody SignInDTO request) {
         Authentication auth;
         try{ auth = authManager.authenticate(
-                new UsernamePasswordAuthenticationToken(request.name(), request.password()));
+                new UsernamePasswordAuthenticationToken(request.email(), request.password()));
                 SecurityContextHolder.getContext().setAuthentication(auth);
                 String token = jwtService.generateToken(request);
 

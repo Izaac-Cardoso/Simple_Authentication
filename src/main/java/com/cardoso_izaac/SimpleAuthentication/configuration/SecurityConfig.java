@@ -58,11 +58,6 @@ public class SecurityConfig {
         return authManagerBuilder.build();
     }
 
-//    @Bean
-//    public AuthenticationManager authenticationManager(AuthenticationConfiguration authManagerConfig) throws Exception {
-//        return authManagerConfig.getAuthenticationManager();
-//    }
-
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
