@@ -1,0 +1,12 @@
+package com.cardoso_izaac.SimpleAuthentication.exceptions;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
+
+@ResponseStatus(HttpStatus.BAD_REQUEST)
+public class BadCredentialsException extends RuntimeException {
+
+    public BadCredentialsException(String massage) {
+        super(massage);
+    }
+}
